@@ -1,0 +1,33 @@
+=
+{name -> Mon site web}          #Correspond au nom de vôtre action
+{url -> https://google.com}                  #URL du site à récupérer
++
+{max-depth -> 0}
+{versioning -> off}
+{type -> (text/html, image/jpeg, application/xml)}
+
+=
+{name -> Mon deuxieme site} #Correspond au nom de vôtre deuxième action
+{url -> https://lien2.com}                  #URL du site à récupérer
++
+{max-depth -> 0}              #Liste des options au format {KEY -> VALUE}
+{versioning -> off}
+
+==
+{name -> Ma super tache}
+{second -> 10}                  #Lance les deux requêtes HTTP toutes les 10 secondes
++
+(Mon site web, Mon deuxieme site)
+
+==                              #Lance la requête HTTP toutes les 2 minutes et 10 secondes
+{name -> Ma tache facile}
+{minute -> 2}
+{second -> 10}
++
+(Mon site web)
+
+==                              #Lance la requêtes HTTP toutes les 6 heures
+{name -> Ma tache facile}
+{hour -> 6}
++
+(Mon deuxieme site)
