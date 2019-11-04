@@ -23,6 +23,7 @@ int main() {
     //         printf("value : %s\n",s->actions[i]->options[j]->value);
     //     }
     //     ;
+    
     // }
     // for(int i = 0; i < s->nbTasks; i++)
     // {
