@@ -1,8 +1,11 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "cert-err34-c"
 #include <stdio.h>
-#include <curl/curl.h>
+#include <stdlib.h>
+#include <string.h>
+#include "Curl/curl.h"
 #include "conf_funcs.h"
+#include "scrap_funcs.h"
 
 size_t getData(void *ptr, size_t size, size_t nmemb, void *stream)
 {
@@ -20,7 +23,7 @@ void scrap(action * a){
     printf("scrap start for %s\n\n", a->url);
 
     CURL * curl = curl_easy_init();
-
+    
     if (curl){
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, a->url);

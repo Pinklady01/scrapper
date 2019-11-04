@@ -15,7 +15,7 @@ int getNbSites(FILE *);
 void setSites(FILE *, task *, int);
 
 settings * handleConf(char *filename){
-    char buf[100];
+    char buf[1000];
     int nbTasks = 0, nbActions = 0;
     task ** tasks;
     action ** actions;
@@ -27,6 +27,7 @@ settings * handleConf(char *filename){
         return NULL;
 
     while (fgets(buf, 100, f) != NULL){
+        
         if (buf[0] == '='){
             if (buf[1] == '='){
                 nbTasks++;
@@ -43,13 +44,13 @@ settings * handleConf(char *filename){
 
     nbTasks = 0;
     nbActions = 0;
-
     while (fgets(buf, 100, f) != NULL){
         if (buf[0] == '='){
             if (buf[1] == '='){
                 tasks[nbTasks] = handleTask(f);
                 nbTasks++;
             } else {
+                
                 actions[nbActions] = handleAction(f);
                 nbActions++;
             }
@@ -73,6 +74,7 @@ action * handleAction(FILE *f){
     int nbAssocs = 0, i;
     char buf[100];
 
+    //printf("%s\n",buf);
     setActionName(f, a);
     fgets(buf, 100, f);
     setActionURL(f, a);
@@ -126,6 +128,7 @@ void setActionName(FILE *f, action *a){
         count++;
     }
     name[count] = '\0';
+    //printf("name : %s\n",name);
     fseek(f, current_pos, SEEK_SET);
     a->name = malloc(sizeof(char) * (count + 1));
     strcpy(a->name, name);
@@ -143,6 +146,7 @@ void setActionURL(FILE *f, action *a){
         count++;
     }
     url[count] = '\0';
+    //printf("url : %s\n",url);
     fseek(f, current_pos, SEEK_SET);
     a->url = malloc(sizeof(char) * (count + 1));
     strcpy(a->url, url);
@@ -168,12 +172,15 @@ int getNbAssoc(FILE *f){
     char buf[100];
     int count = 0, actual;
     actual = ftell(f);
+    int end = 0;
     while(fgets(buf, 100, f) != NULL){
-        if (buf[0] == ' ' || buf[0] == '\n'){
-            break;
+        
+        if (buf[0] != '{'){
+            end = 1;
         } else if (buf[0] == '{'){
             count++;
         }
+        if(end == 1) break;
     }
     fseek(f, actual, SEEK_SET);
     return count;

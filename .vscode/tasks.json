@@ -1,0 +1,19 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "gcc build active file",
+            "command": "",
+            "args": [
+                "-g",
+                "${main.c conf_funcs.c scrap_funcs.c}",
+                "-o",
+                "sCrapper"
+            ],
+            "options": {
+                "cwd": "/usr/bin"
+            }
+        }
+    ],
+    "version": "2.0.0"
+}
