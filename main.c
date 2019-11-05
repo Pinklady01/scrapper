@@ -1,18 +1,29 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include "conf_funcs.h"
 #include "scrap_funcs.h"
 #include <math.h>
+#include "parser/parser.c"
 
 int main() {
-    time_t startTime = time(NULL), actualTime;
+
+    FILE *f=fopen("../Mon deuxieme site.html","rb");
+    int sizeFile = calculateFileSize("../Mon deuxieme site.html");
+    char *contentFile = malloc(sizeFile);
+    fread(contentFile,1,sizeFile,f);
+    //printf("%s",contentFile);
+    fillStructFromHHTML(contentFile);
+    fclose(f);
+
+    /*time_t startTime = time(NULL), actualTime;
     settings * s = handleConf("./config.sconf");
 
     if (s == NULL){
         fprintf(stderr, "conf failed");
         return 1;
-    }
+    }*/
     // for(int i = 0; i < s->nbActions;i++)
     // {
     //     printf("name : %s\n",s->actions[i]->name);
@@ -31,7 +42,7 @@ int main() {
     // }
     
 
-
+/*
     while(1){
         
         actualTime = time(NULL);
@@ -57,5 +68,5 @@ int main() {
         
     }
     return 0;
-    
+    */
 }
