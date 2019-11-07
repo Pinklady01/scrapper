@@ -21,14 +21,13 @@ int calculateFileSize(char *fileName){
 void fillStructFromHTML(char *tab){
     //char *newTab=malloc(sizeof(tab));
     char *tagName=malloc((sizeof(char)*8));
-    int traitement=0;
     int endingChar;
     for(int i = 0;i < strlen(tab);i++){
-        if(tab[i] == '<' && traitement == 0){
-            endingChar = searchEndingChar(i+1,tab,'>')-1;
-            traitement = 1;
+        if(tab[i] == '<'){
+            endingChar = searchEndingChar(i,tab,'>');
             //printf("%c",tab[endingChar]);
-            break;
+            //searchContentBetween2positions(tab,i,endingChar)
+            printf("%s",searchContentBetween2positions(tab,i,endingChar));
         }
     }
     /*for(int i = 0;i<size;i++){
@@ -61,10 +60,12 @@ int searchEndingChar(int startingChar,char *tab,char symbol){
 }
 
 char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
-    char *dest = malloc(sizeof(char)*(endingChar-startingChar));
+    char *dest = malloc(sizeof(char)*(endingChar-startingChar+1));
     int counter = 0;
     for(int i = startingChar;i<=endingChar;i++){
         dest[counter] = tab[i];
+        printf("%c",tab[i]);
+        counter++;
     }
     return dest;
 }
