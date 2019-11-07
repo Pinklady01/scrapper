@@ -14,7 +14,7 @@ int main() {
     char *contentFile = malloc(sizeFile);
     fread(contentFile,1,sizeFile,f);
     //printf("%s",contentFile);
-    fillStructFromHHTML(contentFile);
+    fillStructFromHTML(contentFile);
     fclose(f);
 
     /*time_t startTime = time(NULL), actualTime;

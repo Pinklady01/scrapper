@@ -2,8 +2,10 @@
 //#include "struct.c"
 //#include "parser.h"
 int calculateFileSize(char *);
-void fillStructFromHHTML(char *);
-int searchTagName(int,char *);
+void fillStructFromHTML(char *);
+int searchEndingChar(int,char *,char);
+char *searchContentBetween2positions(char *,int,int);
+char *substr(char *src,int pos,int len);
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -16,14 +18,14 @@ int calculateFileSize(char *fileName){
     return counter;
 }
 
-void fillStructFromHHTML(char *tab){
+void fillStructFromHTML(char *tab){
     //char *newTab=malloc(sizeof(tab));
     char *tagName=malloc((sizeof(char)*8));
     int traitement=0;
     int endingChar;
     for(int i = 0;i < strlen(tab);i++){
         if(tab[i] == '<' && traitement == 0){
-            endingChar = searchTagName(i+1,tab)-1;
+            endingChar = searchEndingChar(i+1,tab,'>')-1;
             traitement = 1;
             //printf("%c",tab[endingChar]);
             break;
@@ -50,12 +52,31 @@ void fillStructFromHHTML(char *tab){
         }
     }*/
 }
-int searchTagName(int startingChar,char *tab){
+int searchEndingChar(int startingChar,char *tab,char symbol){
     int counter=startingChar;
-    while(tab[counter]!=' '&& tab[counter]!='>'){
+    while(tab[counter]!=' '&& tab[counter]!=symbol){
         counter++;
     }
     return counter;
+}
+
+char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
+    char *dest = malloc(sizeof(char)*(endingChar-startingChar));
+    int counter = 0;
+    for(int i = startingChar;i<=endingChar;i++){
+        dest[counter] = tab[i];
+    }
+    return dest;
+}
+
+
+char *substr(char *src,int pos,int len) {
+    char *dest=NULL;
+    if (len>0) {
+        dest = (char *) malloc(len+1);
+        strncat(dest,src+pos,len);
+    }
+    return dest;
 }
 
 
