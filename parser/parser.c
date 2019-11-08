@@ -3,9 +3,11 @@
 //#include "parser.h"
 int calculateFileSize(char *);
 void fillStructFromHTML(char *);
+int searchEndingChar2(int,char *,char *);
 int searchEndingChar(int,char *,char);
 char *searchContentBetween2positions(char *,int,int);
 char *substr(char *src,int pos,int len);
+int mysSrcmp(char *, char *);
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -20,51 +22,56 @@ int calculateFileSize(char *fileName){
 
 void fillStructFromHTML(char *tab){
     //char *newTab=malloc(sizeof(tab));
-    char *tagName=malloc((sizeof(char)*8));
+    //char *tagName=malloc((sizeof(char)*8));
     int endingChar;
+    char symbol='>';
     for(int i = 0;i < strlen(tab);i++){
         if(tab[i] == '<'){
-            endingChar = searchEndingChar(i,tab,'>');
-            //printf("%c",tab[endingChar]);
-            //searchContentBetween2positions(tab,i,endingChar)
-            printf("%s",searchContentBetween2positions(tab,i,endingChar));
+            endingChar = searchEndingChar(i,tab,symbol);
+            printf("%s\n",searchContentBetween2positions(tab,i,endingChar));
+            /*if(mysSrcmp(searchContentBetween2positions(tab,i,searchEndingChar(i,tab,'=')),'<a href=') == 0){
+                printf("blop\n");
+            }*/
         }
     }
-    /*for(int i = 0;i<size;i++){
-        if(tab[i]=="<"&&traitement==0){
-            //verifier si cela ne va pas modifier à chaque fois les valeurs précédentes ou si nouvelle valeur
-            searchTagName(i+1,&tab,&tagName);
-            struct tag = new tag();
-            tag->tagHTML=&tagName;
-            traitement=1;
-        }else if(tab[i]=="<"){
-            char verifyTag=malloc(sizeof(char)*8);
-            searchTagName()i+1;&tab;&verifyTag);
-            //verifier comment dire "contient"
-            //mettre les autres cas de balise fermante seule
-            if(verifyTag=="img"){
-                //l'ajoute dans la structure mais ne le met pas dans le string de la structure en cours
-            }
-        } else if(tab[i]=="<"&&tab[i+1]=="/"){
-            //verifie si le tag après correspond à celui de la structure.
-            //ajoute dans la structure le string entier avec en size "i"
-        }
-    }*/
 }
-int searchEndingChar(int startingChar,char *tab,char symbol){
-    int counter=startingChar;
-    while(tab[counter]!=' '&& tab[counter]!=symbol){
-        counter++;
+int compareTag(char * str1,char *str2){
+    mysSrcmp(str1,str2);
+}
+
+
+int searchEndingChar2(int startingChar,char *tab,char *symbol){
+    int counter = startingChar;
+    int true = 1;
+    while(true == 1){
+        for(int i = 0;i <= strlen(symbol);i++){
+            if(tab[counter] != symbol[i]){
+                continue;
+            }else{
+                true = 0;
+            }
+        }
+        if(true == 1){
+            counter++;
+        }
     }
     return counter;
 }
+
+int searchEndingChar(int startingChar,char *tab,char symbol){
+    int counter = startingChar;
+    while(tab[counter] != symbol){
+            counter++;
+        }
+    return counter;
+    }
 
 char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
     char *dest = malloc(sizeof(char)*(endingChar-startingChar+1));
     int counter = 0;
     for(int i = startingChar;i<=endingChar;i++){
         dest[counter] = tab[i];
-        printf("%c",tab[i]);
+        //printf("%c",tab[i]);
         counter++;
     }
     return dest;
@@ -78,6 +85,21 @@ char *substr(char *src,int pos,int len) {
         strncat(dest,src+pos,len);
     }
     return dest;
+}
+
+/*
+ * return 0 if two strings are identicals
+ */
+int mysSrcmp(char *strg1, char *strg2){
+    while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 ){
+        strg1++;
+        strg2++;
+    }
+    if(*strg1 == *strg2){
+        return 0;
+    }else{
+        return *strg1 - *strg2;
+    }
 }
 
 
