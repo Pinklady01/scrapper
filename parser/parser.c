@@ -21,19 +21,19 @@ int calculateFileSize(char *fileName){
 }
 
 void fillStructFromHTML(char *tab) {
-    char *symbol = malloc(sizeof(char) * 3);
-    symbol[0] = '>';
-    symbol[1] = '=';
     char link[] = "a href=";
     char picture[] = "img src=";
+    char script[] = "script ";
     int endingChar;
     for (int i = 0; i < strlen(tab); i++) {
         if (tab[i] == '<') {
-            endingChar = searchEndingChar(i, tab, symbol);
-            if (mysSrcmp(searchContentBetween2positions(tab, i + 1,endingChar),link) == 0){
-                writeFile(searchContentBetween2positions(tab, i ,searchEndingChar(i, tab, ">")),"../link.tkt");
-            }else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,endingChar),picture) == 0){
-                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../picture.tkt");
+            endingChar = searchEndingChar(i, tab, ">=");
+            if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), link) == 0) {
+                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/link.txt");
+            } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), picture) == 0) {
+                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/picture.txt");
+            } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
+                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/script.txt");
             }
 
         }
