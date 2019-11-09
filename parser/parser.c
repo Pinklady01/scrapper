@@ -3,11 +3,11 @@
 //#include "parser.h"
 int calculateFileSize(char *);
 void fillStructFromHTML(char *);
-int searchEndingChar2(int,char *,char *);
-int searchEndingChar(int,char *,char);
+int searchEndingChar(int,char *,char *);
 char *searchContentBetween2positions(char *,int,int);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
+int writeFile(char*,char*);
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -20,27 +20,35 @@ int calculateFileSize(char *fileName){
     return counter;
 }
 
-void fillStructFromHTML(char *tab){
-    //char *newTab=malloc(sizeof(tab));
-    //char *tagName=malloc((sizeof(char)*8));
+void fillStructFromHTML(char *tab) {
+    char *symbol = malloc(sizeof(char) * 3);
+    symbol[0] = '>';
+    symbol[1] = '=';
+    char link[] = "a href=";
+    char picture[] = "img src=";
     int endingChar;
-    char symbol='>';
-    for(int i = 0;i < strlen(tab);i++){
-        if(tab[i] == '<'){
-            endingChar = searchEndingChar(i,tab,symbol);
-            printf("%s\n",searchContentBetween2positions(tab,i,endingChar));
-            /*if(mysSrcmp(searchContentBetween2positions(tab,i,searchEndingChar(i,tab,'=')),'<a href=') == 0){
-                printf("blop\n");
-            }*/
+    for (int i = 0; i < strlen(tab); i++) {
+        if (tab[i] == '<') {
+            endingChar = searchEndingChar(i, tab, symbol);
+            if (mysSrcmp(searchContentBetween2positions(tab, i + 1,endingChar),link) == 0){
+                writeFile(searchContentBetween2positions(tab, i ,searchEndingChar(i, tab, ">")),"../link.tkt");
+            }else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,endingChar),picture) == 0){
+                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../picture.tkt");
+            }
+
         }
     }
 }
-int compareTag(char * str1,char *str2){
-    mysSrcmp(str1,str2);
+
+int writeFile(char* string,char* filename){
+    FILE* f=fopen(filename,"a");
+        fputs(string,f);
+        fputc('\n',f);
+    fclose(f);
 }
 
 
-int searchEndingChar2(int startingChar,char *tab,char *symbol){
+int searchEndingChar(int startingChar,char *tab,char *symbol){
     int counter = startingChar;
     int true = 1;
     while(true == 1){
@@ -57,14 +65,6 @@ int searchEndingChar2(int startingChar,char *tab,char *symbol){
     }
     return counter;
 }
-
-int searchEndingChar(int startingChar,char *tab,char symbol){
-    int counter = startingChar;
-    while(tab[counter] != symbol){
-            counter++;
-        }
-    return counter;
-    }
 
 char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
     char *dest = malloc(sizeof(char)*(endingChar-startingChar+1));
