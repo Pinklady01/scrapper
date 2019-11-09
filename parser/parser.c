@@ -24,6 +24,7 @@ void fillStructFromHTML(char *tab) {
     char link[] = "a href=";
     char picture[] = "img src=";
     char script[] = "script ";
+    char css[]="link ";
     int endingChar;
     for (int i = 0; i < strlen(tab); i++) {
         if (tab[i] == '<') {
@@ -34,10 +35,14 @@ void fillStructFromHTML(char *tab) {
                 writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/picture.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
                 writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/script.txt");
+            } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")),css) == 0) {
+                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/css.txt");
+            }else{
+                printf("%s\n",searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")));
             }
-
         }
     }
+    printf("execution finie");
 }
 
 int writeFile(char* string,char* filename){
