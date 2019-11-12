@@ -13,6 +13,33 @@ size_t getData(void *ptr, size_t size, size_t nmemb, void *stream)
     return written;
 }
 
+int getRessourcesStream(char *url,char *filename)
+{
+    CURL *curl;
+    CURLcode res;
+    FILE* f=fopen(filename,"wb");
+
+
+    curl = curl_easy_init();
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
+
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK){
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+            fclose(f);
+            curl_easy_cleanup(curl);
+            return -1;
+        }
+        fclose(f);
+        curl_easy_cleanup(curl);
+    }
+    return 0;
+}
+
 void scrap(action * a){
     char * pageFilename = malloc(sizeof(char) * (strlen(a->name) + 6));
     strcpy(pageFilename, a->name);
@@ -30,6 +57,7 @@ void scrap(action * a){
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, getData);
+
 
         for (int i = 0; i < a->nbOptions; i++){
             if (strcmp(a->options[i]->key, "max-depth") == 0){

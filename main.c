@@ -14,8 +14,9 @@ int main() {
     char *contentFile = malloc(sizeFile);
     fread(contentFile,1,sizeFile,f);
     //printf("%s",contentFile);
-    fillStructFromHTML(contentFile);
+    fillFileFromHTML(contentFile);
     fclose(f);
+    getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");
 
     /*time_t startTime = time(NULL), actualTime;
     settings * s = handleConf("./config.sconf");
