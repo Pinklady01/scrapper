@@ -5,13 +5,20 @@
 #include "conf_funcs.h"
 #include "scrap_funcs.h"
 #include <math.h>
-#include "parser/parser.c"
+#include "parser/parser.h"
 
 int main() {
-
-    FILE *f=fopen("../Mon deuxieme site.html","rb");
-    int sizeFile = calculateFileSize("../Mon deuxieme site.html");
+    printf("pass\n");
+    FILE *f=fopen("./Mon deuxieme site.html","rb");
+    if(f!=NULL)
+    {
+        printf("FOPEN\n");
+    }
+    else printf("FERROR\n");
+    int sizeFile = calculateFileSize("./Mon deuxieme site.html");
+    printf("sizeFile = %d\n",sizeFile);
     char *contentFile = malloc(sizeFile);
+    printf("pass\n");
     fread(contentFile,1,sizeFile,f);
     //printf("%s",contentFile);
     fillFileFromHTML(contentFile);

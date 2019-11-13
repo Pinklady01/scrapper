@@ -1,10 +1,11 @@
 //
 // Created by Marion Mota on 05/11/2019.
 //
-#include <string.h>
-//#include "struct.h"
+#include "string.h"
+#include "stdlib.h"
+#include "struct_src.h"
 
-struct StringArray;
+
 
 typedef struct StringArray{
     char **tab;
@@ -12,8 +13,7 @@ typedef struct StringArray{
     int capacity;
 } StringArray;
 
-StringArray *createStringArray();
-void addContentString(StringArray *,char *);
+
 
 StringArray *createStringArray(){
     StringArray *newString = malloc(sizeof(StringArray));
