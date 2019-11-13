@@ -3,17 +3,6 @@
 #include <string.h>
 #include "conf_funcs.h"
 
-action * handleAction(FILE *);
-task * handleTask(FILE *);
-void setActionName(FILE *, action *);
-void setActionURL(FILE *, action *);
-void setTaskName(FILE *, task *);
-int getNbAssoc(FILE *);
-void setActionOption(FILE *, action *, int);
-void setTime(FILE *, task *);
-int getNbSites(FILE *);
-void setSites(FILE *, task *, int);
-
 settings * handleConf(char *filename){
     char buf[1000];
     int nbTasks = 0, nbActions = 0;

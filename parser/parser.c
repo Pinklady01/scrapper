@@ -1,17 +1,10 @@
 #include <string.h>
 #include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include "struct_src.c"
-//#include "parser.h"
-
-int calculateFileSize(char *);
-void fillFileFromHTML(char *);
-int searchEndingChar(int,char *,char *);
-char *searchContentBetween2positions(char *,int,int);
-void createDirectoryIfNotExist(char *);
-char *substr(char *src,int pos,int len);
-int mysSrcmp(char *, char *);
-int writeFile(char*,char*);
+#include "struct_src.h"
+#include "parser.h"
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -68,7 +61,7 @@ void fillFileFromHTML(char *tab) {
     //Télécharger le fichier dans le bon dossier.
 }
 
-int writeFile(char* string,char* filename){
+void writeFile(char* string,char* filename){
     FILE* f=fopen(filename,"a");
         fputs(string,f);
         fputc('\n',f);

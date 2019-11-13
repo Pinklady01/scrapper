@@ -2,18 +2,9 @@
 // Created by Marion Mota on 05/11/2019.
 //
 #include <string.h>
-//#include "struct.h"
+#include <stdlib.h>
+#include "struct_src.h"
 
-struct StringArray;
-
-typedef struct StringArray{
-    char **tab;
-    int counter;
-    int capacity;
-} StringArray;
-
-StringArray *createStringArray();
-void addContentString(StringArray *,char *);
 
 StringArray *createStringArray(){
     StringArray *newString = malloc(sizeof(StringArray));
