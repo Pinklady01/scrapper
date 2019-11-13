@@ -29,5 +29,15 @@ typedef struct settings {
 } settings;
 
 settings * handleConf(char * filename);
+action * handleAction(FILE *);
+task * handleTask(FILE *);
+void setActionName(FILE *, action *);
+void setActionURL(FILE *, action *);
+void setTaskName(FILE *, task *);
+int getNbAssoc(FILE *);
+void setActionOption(FILE *, action *, int);
+void setTime(FILE *, task *);
+int getNbSites(FILE *);
+void setSites(FILE *, task *, int);
 
 #endif //SCRAPPER_CONF_FUNCS_H

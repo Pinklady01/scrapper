@@ -5,7 +5,7 @@
 #include "conf_funcs.h"
 #include "scrap_funcs.h"
 #include <math.h>
-#include "parser/parser.c"
+#include "parser/parser.h"
 
 int main() {
 
