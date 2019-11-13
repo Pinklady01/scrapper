@@ -1,8 +1,9 @@
 #include <string.h>
 #include <sys/stat.h>
 
-//#include "struct.c"
+#include "struct_src.c"
 //#include "parser.h"
+
 int calculateFileSize(char *);
 void fillFileFromHTML(char *);
 int searchEndingChar(int,char *,char *);
@@ -36,21 +37,35 @@ void fillFileFromHTML(char *tab) {
     char script[] = "script ";
     char css[]="link ";
     int endingChar;
+    StringArray *arrayLink = createStringArray();
+    StringArray *arrayPicture = createStringArray();
+    StringArray *arrayScript = createStringArray();
+    StringArray *arrayCss = createStringArray();
+
     for (int i = 0; i < strlen(tab); i++) {
         if (tab[i] == '<') {
             endingChar = searchEndingChar(i, tab, ">=");
             if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), link) == 0) {
-                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
+                addContentString(arrayLink,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
+                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), picture) == 0) {
-                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
+                addContentString(arrayPicture,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
+                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
-                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
+                addContentString(arrayScript,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
+                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")),css) == 0) {
-                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
+                addContentString(arrayCss,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
+                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
             }
         }
     }
-    printf("execution finie");
+    printf("execution finie\n");
+
+    //fonction qui va parcourir les structures
+    //pour src= dans link et script ==> créer les directory.
+    //      Pour créer les directory: lire le src avant les "/" si n'existe pas dans les fichiers, le créer.
+    //Télécharger le fichier dans le bon dossier.
 }
 
 int writeFile(char* string,char* filename){
@@ -80,12 +95,13 @@ int searchEndingChar(int startingChar,char *tab,char *symbol){
 }
 
 char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
-    char *dest = malloc(sizeof(char)*(endingChar-startingChar+1));
+    char *dest = malloc(sizeof(char)*(endingChar-startingChar+2));
     int counter = 0;
     for(int i = startingChar;i<=endingChar;i++){
         dest[counter] = tab[i];
         counter++;
     }
+    dest[counter]='\0';
     return dest;
 }
 

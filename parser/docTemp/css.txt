@@ -1,0 +1,2 @@
+<link rel="stylesheet" media="screen" type="text/css" href="/bois/main.css" />
+<link rel="stylesheet" href="/bois/css/lightbox.css" type="text/css" media="screen" />
