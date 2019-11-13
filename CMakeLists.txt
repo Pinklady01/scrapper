@@ -3,7 +3,7 @@ project(sCrapper C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(sCrapper main.c conf_funcs.h conf_funcs.c scrap_funcs.h scrap_funcs.c)
+add_executable(sCrapper main.c conf_funcs.h conf_funcs.c scrap_funcs.h scrap_funcs.c parser/parser.c parser/parser.h parser/struct_src.c parser/struct_src.h)
 
 find_package(CURL)
 IF (CURL_FOUND)

@@ -2,7 +2,6 @@
 // Created by Marion Mota on 05/11/2019.
 //
 
-
 #ifndef SCRAPPER_PARSER_H
 #define SCRAPPER_PARSER_H
 
