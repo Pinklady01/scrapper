@@ -39,16 +39,16 @@ void fillFileFromHTML(char *tab) {
             endingChar = searchEndingChar(i, tab, ">=");
             if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), link) == 0) {
                 addContentString(arrayLink,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
+                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), picture) == 0) {
                 addContentString(arrayPicture,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
+                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
                 addContentString(arrayScript,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
+                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")),css) == 0) {
                 addContentString(arrayCss,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
+                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
             }
         }
     }
