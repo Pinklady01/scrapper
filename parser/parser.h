@@ -13,6 +13,10 @@ void createDirectoryIfNotExist(char *);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
 void writeFile(char*,char*);
+void readStruct(struct StringArray*,char *);
+void createDirectoryFromPath(char* path);
+int verifPath(char*);
+char* searchStringBetweenTwoChar(char*,char*, char);
 
 #endif //SCRAPPER_PARSER_H
 

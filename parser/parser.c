@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "struct_src.h"
 #include "parser.h"
+#include <dirent.h>
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -39,25 +40,80 @@ void fillFileFromHTML(char *tab) {
             endingChar = searchEndingChar(i, tab, ">=");
             if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), link) == 0) {
                 addContentString(arrayLink,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
+                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), picture) == 0) {
                 addContentString(arrayPicture,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
+                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
                 addContentString(arrayScript,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
+                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")),css) == 0) {
                 addContentString(arrayCss,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
+                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
             }
         }
     }
+    readStruct(arrayPicture,"src=\"");
+    readStruct(arrayScript,"src=\"");
     printf("execution finie\n");
 
     //fonction qui va parcourir les structures
     //pour src= dans link et script ==> créer les directory.
     //      Pour créer les directory: lire le src avant les "/" si n'existe pas dans les fichiers, le créer.
+    //rajouter struct settings dans les fcts pour s->task[i]
     //Télécharger le fichier dans le bon dossier.
+}
+
+void readStruct(struct StringArray* structArray,char *string) {
+    char *p;
+    for (int i = 0; i < structArray->counter; i++) {
+        p = searchStringBetweenTwoChar(structArray->tab[i],string,'\"');
+        if (p) {
+            printf("%s", p);
+            createDirectoryFromPath(p);
+        }
+    }
+}
+
+char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar){
+    char* p = strstr(tab, startingString);
+    int counter = strlen(startingString);
+    int counterEnd = counter;
+    while (p[counterEnd] != endingChar){
+        counterEnd++;
+    }
+    char* res = searchContentBetween2positions(p,counter,counterEnd);
+
+    return res;
+}
+
+void createDirectoryFromPath(char *path) {
+    int exist;
+    char* pathSearch = malloc(sizeof(char)*strlen(path));
+    for(int i = 1;i<strlen(path);i++){
+        if(path[i] == '/'){
+            exist = verifPath(pathSearch);
+            if(exist == 1){
+                createDirectoryIfNotExist(pathSearch);
+            }
+        }
+        pathSearch[i-1] = path[i];
+    }
+}
+
+void downloadFileFromPath(char* path){
+    //retrieve URL
+
+}
+
+int verifPath(char* path){
+    DIR* rep = NULL;
+    rep = opendir(path); /* Ouverture d'un dossier */
+    if (rep == NULL) /* Si le dossier n'a pas pu être ouvert */
+        return 1; /* (mauvais chemin par exemple) */
+    if (closedir(rep) == -1) /* S'il y a eu un souci avec la fermeture */
+        return -1;
+    return 0;
 }
 
 void writeFile(char* string,char* filename){
