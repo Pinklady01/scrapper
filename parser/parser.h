@@ -5,18 +5,21 @@
 #ifndef SCRAPPER_PARSER_H
 #define SCRAPPER_PARSER_H
 
+#include "../conf_funcs.h"
+
 int calculateFileSize(char *);
-void fillFileFromHTML(char *);
+void fillFileFromHTML(char *, action*);
 int searchEndingChar(int,char *,char *);
 char *searchContentBetween2positions(char *,int,int);
-void createDirectoryIfNotExist(char *);
+void createDirectoryIfNotExist(char *, action*);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
 void writeFile(char*,char*);
-void readStruct(struct StringArray*,char *);
-void createDirectoryFromPath(char* path);
-int verifPath(char*);
+void readStruct(struct StringArray* ,char* ,action* );
+void createDirectoryFromPath(char *, action* );
+int verifPath(char*, action*);
 char* searchStringBetweenTwoChar(char*,char*, char);
+char* createPathFile(char* , action*);
 
 #endif //SCRAPPER_PARSER_H
 

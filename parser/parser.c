@@ -17,14 +17,15 @@ int calculateFileSize(char *fileName){
     return counter;
 }
 
-void createDirectoryIfNotExist(char *directory){
+void createDirectoryIfNotExist(char *directory, action* a){
     struct stat st = {0};
-    if (stat(directory, &st) == -1) {
+    char* pathSearch = createPathFile(directory,a);
+    if (stat(pathSearch, &st) == -1) {
         mkdir(directory, 0700);
     }
 }
 
-void fillFileFromHTML(char *tab) {
+void fillFileFromHTML(char *tab, action* a) {
     char link[] = "a href=";
     char picture[] = "img src=";
     char script[] = "script ";
@@ -53,24 +54,27 @@ void fillFileFromHTML(char *tab) {
             }
         }
     }
-    readStruct(arrayPicture,"src=\"");
-    readStruct(arrayScript,"src=\"");
+    readStruct(arrayPicture,"src=\"",a);
+    readStruct(arrayScript,"src=\"",a);
+    readStruct(arrayCss,"href=\"",a);
     printf("execution finie\n");
+
 
     //fonction qui va parcourir les structures
     //pour src= dans link et script ==> créer les directory.
-    //      Pour créer les directory: lire le src avant les "/" si n'existe pas dans les fichiers, le créer.
-    //rajouter struct settings dans les fcts pour s->task[i]
-    //Télécharger le fichier dans le bon dossier.
+    //Pour créer les directory: lire le src avant les "/" si n'existe pas dans les fichiers, le créer.
+    //rajouter struct settings (action?) dans les fcts pour s->task[i]
+    //envoi struct css avec href="
+    //TODO: fonction Télécharger le fichier dans le bon dossier.
 }
 
-void readStruct(struct StringArray* structArray,char *string) {
+void readStruct(struct StringArray* structArray,char *string, action* a) {
     char *p;
     for (int i = 0; i < structArray->counter; i++) {
         p = searchStringBetweenTwoChar(structArray->tab[i],string,'\"');
         if (p) {
             printf("%s", p);
-            createDirectoryFromPath(p);
+            createDirectoryFromPath(p,a);
         }
     }
 }
@@ -87,14 +91,14 @@ char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar
     return res;
 }
 
-void createDirectoryFromPath(char *path) {
+void createDirectoryFromPath(char *path, action* a) {
     int exist;
     char* pathSearch = malloc(sizeof(char)*strlen(path));
     for(int i = 1;i<strlen(path);i++){
         if(path[i] == '/'){
-            exist = verifPath(pathSearch);
+            exist = verifPath(pathSearch,a);
             if(exist == 1){
-                createDirectoryIfNotExist(pathSearch);
+                createDirectoryIfNotExist(pathSearch,a);
             }
         }
         pathSearch[i-1] = path[i];
@@ -106,9 +110,19 @@ void downloadFileFromPath(char* path){
 
 }
 
-int verifPath(char* path){
+//TODO: A VERIFIER CreatePathFile
+char* createPathFile(char* path, action* a){
+    char* pathOfFile = malloc(sizeof(char)*(strlen(a->url))+strlen(path)+1);
+    strcpy(pathOfFile,a->url);
+    strcat(pathOfFile,path);
+
+    return pathOfFile;
+}
+
+int verifPath(char* path, action* a){
     DIR* rep = NULL;
-    rep = opendir(path); /* Ouverture d'un dossier */
+    char* pathOfFile = createPathFile(path,a);
+    rep = opendir(pathOfFile); /* Ouverture d'un dossier */
     if (rep == NULL) /* Si le dossier n'a pas pu être ouvert */
         return 1; /* (mauvais chemin par exemple) */
     if (closedir(rep) == -1) /* S'il y a eu un souci avec la fermeture */

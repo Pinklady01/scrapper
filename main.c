@@ -31,7 +31,7 @@ int main() {
          char *contentFile = malloc(sizeFile);
          fread(contentFile,1,sizeFile,f);
          //printf("%s",contentFile);
-         fillFileFromHTML(contentFile);
+         fillFileFromHTML(contentFile,s->action[i]);
          fclose(f);
          getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");
 

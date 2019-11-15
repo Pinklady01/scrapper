@@ -27,7 +27,7 @@ void addContentString(StringArray *name,char *content){
     }
     char *newString = malloc(sizeof(char)*strlen(content));
     strcpy(newString,content);
-    name->tab[name->counter++]=newString;
+    name->tab[name->counter++] = newString;
 }
 
 
