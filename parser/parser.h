@@ -8,18 +8,18 @@
 #include "../conf_funcs.h"
 
 int calculateFileSize(char *);
-void fillFileFromHTML(char *, action*);
+void fillFileFromHTML(char *,struct action*);
 int searchEndingChar(int,char *,char *);
 char *searchContentBetween2positions(char *,int,int);
-void createDirectoryIfNotExist(char *, action*);
+void createDirectoryIfNotExist(char *,struct action*);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
 void writeFile(char*,char*);
-void readStruct(struct StringArray* ,char* ,action* );
-void createDirectoryFromPath(char *, action* );
-int verifPath(char*, action*);
+void readStruct(struct StringArray* ,char* ,struct action* );
+void createDirectoryFromPath(char *,struct action* );
+int verifPath(char*,struct action*);
 char* searchStringBetweenTwoChar(char*,char*, char);
-char* createPathFile(char* , action*);
+char* createPathFile(char* ,struct action*);
 
 #endif //SCRAPPER_PARSER_H
 

@@ -6,12 +6,13 @@
 #include "scrap_funcs.h"
 #include <math.h>
 #include "parser/parser.h"
+#include "ssl.c"
 
 int main() {
 
-
-    /*time_t startTime = time(NULL), actualTime;
-    settings * s = handleConf("./config.sconf");
+    //test();
+    time_t startTime = time(NULL), actualTime;
+    settings * s = handleConf("../config.sconf");
 
     if (s == NULL){
         fprintf(stderr, "conf failed");
@@ -21,21 +22,21 @@ int main() {
      {
          printf("name : %s\n",s->actions[i]->name);
          printf("url : %s\n",s->actions[i]->url);
-         createDirectoryIfNotExist(s->actions[i]->url);*/
+         //createDirectoryIfNotExist(s->actions[i]->url,s->actions[i]);
 
-         //insertion du parser ici
-         //ajout url aux fct du parser
+         //TODO:insertion du parser ici
+         //TODO:ajout url aux fct du parser
 
-         FILE *f=fopen("../Mon deuxieme site.html","rb");
+         /*FILE *f=fopen("../Mon deuxieme site.html","rb");
          int sizeFile = calculateFileSize("../Mon deuxieme site.html");
          char *contentFile = malloc(sizeFile);
          fread(contentFile,1,sizeFile,f);
          //printf("%s",contentFile);
          fillFileFromHTML(contentFile,s->action[i]);
          fclose(f);
-         getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");
+         getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");*/
 
-         /*for(int j = 0; j < s->actions[i]->nbOptions;j++)
+         for(int j = 0; j < s->actions[i]->nbOptions;j++)
          {
              printf("key : %s\n",s->actions[i]->options[j]->key);
              printf("value : %s\n",s->actions[i]->options[j]->value);
@@ -44,11 +45,11 @@ int main() {
      for(int i = 0; i < s->nbTasks; i++)
      {
          printf("task : %s\n",s->tasks[i]->name);
-     }*/
+     }
 
 
 
-    /*while(1){
+    while(1){
         
         actualTime = time(NULL);
         long long now = (actualTime - startTime);
@@ -72,6 +73,6 @@ int main() {
         }
         
     }
-    return 0;*/
+    return 0;
 
 }
