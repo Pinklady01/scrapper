@@ -24,6 +24,7 @@ void downloadFileFromPath(char*,action*);
 void freeStruct(StringArray*);
 int numberOfOneCharInString(char*,char);
 int verifyIfExtension(char*);
+int checkExtensionHTML(char*);
 void displayStruct(StringArray*);
 
 #endif //SCRAPPER_PARSER_H

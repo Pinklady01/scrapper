@@ -52,7 +52,9 @@ int getRessourcesStream(char *url,char *filename)
     return 0;
 }
 
+
 void scrap(action * a,task* t) {
+    // mettre en paramètre le résultat du scrap et l'url
     int isVersioning = 0;
     //createDirectoryFromPath("",a);
     char temp[100];
@@ -134,6 +136,7 @@ void scrap(action * a,task* t) {
         printf("curl clear\n");
     }
 }
+
 
 void saveAction(int isVersioning, char* path, char* tacheName)
 {

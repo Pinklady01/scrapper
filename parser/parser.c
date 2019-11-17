@@ -6,6 +6,8 @@
 #include "parser.h"
 #include "../scrap_funcs.h"
 #include <dirent.h>
+#include <unistd.h>
+
 
 int calculateFileSize(char *fileName){
     FILE *f = fopen(fileName,"r");
@@ -91,7 +93,6 @@ void readStruct(StringArray* structArray,char *string, action* a) {
             offset = 1;
         }
         if (p) {
-            //printf("%s\n", p);
             if(isURL(p) == 0 && (strlen(p + offset) > 0) && (verifyIfExtension(p + offset) == 0)){
 
                 createDirectoryFromPath(p + offset,a);
@@ -115,7 +116,6 @@ int verifyIfExtension(char* path) {
         }
     }
     pathSearch[taille] = '\0';
-    //printf("%s\n",pathSearch);
     if (strstr(pathSearch, ".") == NULL) {
         free(pathSearch);
         return 1;
@@ -178,10 +178,43 @@ void createDirectoryFromPath(char *path, action* a) {
 void downloadFileFromPath(char* path,action* a){
     char url[500];
     sprintf(url,"%s/%s",a->url,path);
-    //printf("url : %s\n",url);
-    getRessourcesStream(url,createPathFile(path,a));
+    if(access(createPathFile(path,a), F_OK ) == -1 ) {
+        getRessourcesStream(url,createPathFile(path,a));
+        if(checkExtensionHTML(createPathFile(path,a))){
+            //TODO: généraliser la fonction scrap avec en paramètre nom + URL
+            //TODO: appeler la fonction scrap pour chaque nouveau fichier téléchargé ayant une extension HTML
+        }
+    }
+}
 
-    //printf("dest : %s\nurl : %s\n",createPathFile(path,a),url);
+int checkExtensionHTML(char* path){
+    int counter = numberOfOneCharInString(path,'/');
+    int nb = 0;
+    int taille =0;
+    char *pathSearch = malloc(sizeof(char) * strlen(path));
+    for(int i = 0; i<strlen(path);i++){
+        if(nb == counter){
+            pathSearch[taille] = path[i];
+            taille++;
+        }else if(path[i] == '/'){
+            nb++;
+        }
+    }
+    pathSearch[taille] = '\0';
+    char* p;
+    if ((p = strstr(pathSearch, ".")) == NULL) {
+        free(pathSearch);
+        return 1;
+    }else if(strlen(pathSearch) > 1){
+        if(strcmp(p,".html") == 0||strcmp(p,".htm") == 0||strcmp(p,".asp") == 0||strcmp(p,".jsp") == 0||strcmp(p,".php") == 0||strcmp(p,".xhtml") == 0){
+            free(pathSearch);
+            return 0;
+        }
+        free(pathSearch);
+        return 1;
+    }
+    free(pathSearch);
+    return 1;
 }
 
 char* createPathFile(char* path, action* a){
@@ -231,9 +264,6 @@ char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
     return dest;
 }
 
-/*
- * return 0 if two strings are identicals
- */
 int mysSrcmp(char *strg1, char *strg2){
     while( ( *strg1 != '\0' && *strg2 != '\0' ) && *strg1 == *strg2 ){
         strg1++;
