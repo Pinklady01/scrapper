@@ -64,19 +64,17 @@ void scrap(action * a,task* t) {
     FILE *f = fopen(pageName, "wb");
     printf("\n%s\n", pageName);
     if(f == NULL){
-        printf("blop 6666666666666666\n\n");
+        printf("Erreu de lecture du fichier\n\n");
     }
     char* path = malloc(sizeof(char) * (strlen(a->name) + 8));
     strcpy(path ,"Targets/");
     //strcat(path,a->name);
     //printf("%s\n",path);
     createDirectoryIfNotExist(path,a);
-    printf("blop 1 ");
     printf("scrap start for %s\n\n", a->url);
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
     CURL *curl = curl_easy_init();
-    printf(" blop 2 ");
 
     if (curl) {
         CURLcode res;
@@ -91,7 +89,6 @@ void scrap(action * a,task* t) {
 #endif
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, getData);
 
-        printf(" blop 3\n");
         for (int i = 0; i < a->nbOptions; i++) {
             if (strcmp(a->options[i]->key, "max-depth") == 0) {
                 if (0 < atoi(a->options[i]->value)) {
@@ -105,7 +102,6 @@ void scrap(action * a,task* t) {
             }
 
         }
-        printf(" blop 4");
         if (f) {
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
 
@@ -116,10 +112,9 @@ void scrap(action * a,task* t) {
             }
             fclose(f);
         }
-        printf(" blop 5");
         f = fopen(pageName, "rb");
         if(f == NULL){
-            printf(" blop 666\n");
+            printf("Erreur dans la lecture du fichier\n");
         }
         int sizeFile = calculateFileSize(pageName);
         char *contentFile = malloc(sizeFile);

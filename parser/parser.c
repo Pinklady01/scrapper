@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "struct_src.h"
 #include "parser.h"
+#include "../scrap_funcs.h"
 #include <dirent.h>
 
 int calculateFileSize(char *fileName){
@@ -74,6 +75,7 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
             //printf("%s\n", p);
             if(isURL(p) == 0){
                 createDirectoryFromPath(p + offset,a);
+                downloadFileFromPath(p + offset,a);
             }
         }
     }
@@ -96,7 +98,7 @@ char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar
         while (p[counterEnd] != endingChar) {
             counterEnd++;
         }
-        char *res = searchContentBetween2positions(p, counter, counterEnd);
+        char *res = searchContentBetween2positions(p, counter, counterEnd-1);
         return res;
     }
     return "";
@@ -118,9 +120,12 @@ void createDirectoryFromPath(char *path, action* a) {
         }
 }
 
-void downloadFileFromPath(char* path){
-    //retrieve URL
+void downloadFileFromPath(char* path,action* a){
+    char url[500];
+    sprintf(url,"%s/%s",a->url,path);
+    getRessourcesStream(url,createPathFile(path,a));
 
+    printf("dest : %s\nurl : %s\n",createPathFile(path,a),url);
 }
 
 char* createPathFile(char* path, action* a){

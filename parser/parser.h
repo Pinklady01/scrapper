@@ -20,6 +20,7 @@ void createDirectoryFromPath(char *,action* );
 char* searchStringBetweenTwoChar(char*,char*, char);
 char* createPathFile(char* ,action*);
 int isURL(char*);
+void downloadFileFromPath(char*,action*);
 
 #endif //SCRAPPER_PARSER_H
 

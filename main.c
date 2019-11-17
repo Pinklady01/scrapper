@@ -9,7 +9,6 @@
 #include "parser/parser.h"
 
 int main() {
-    //getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");
 
         time_t startTime = time(NULL), actualTime;
         settings *s = handleConf("../config.sconf");
