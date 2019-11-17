@@ -29,6 +29,7 @@ int main() {
                         printf("Executing %s - %dx\n\n", s->tasks[i]->name, s->tasks[i]->timesExecuted);
                         for (int j = 0; j < s->tasks[i]->nbSites; j++) {
                             for (int k = 0; k < s->nbActions; k++) {
+                                printf("action: %s sites: %s\n",s->actions[k]->name,s->tasks[i]->sites[j]);
                                 if (strcmp(s->actions[k]->name, s->tasks[i]->sites[j]) == 0) {
                                     scrap(s->actions[k], s->tasks[i]);
                                 }
@@ -37,7 +38,7 @@ int main() {
                         printf("\n");
                         s->tasks[i]->timesExecuted++;
                     }
-                }
+               }
             }
         }
 

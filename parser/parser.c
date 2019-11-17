@@ -59,12 +59,6 @@ void fillFileFromHTML(char *tab, action* a) {
     readStruct(arrayCss,"href=\"",a);
     printf("execution finie\n");
 
-
-    //fonction qui va parcourir les structures
-    //pour src= dans link et script ==> créer les directory.
-    //Pour créer les directory: lire le src avant les "/" si n'existe pas dans les fichiers, le créer.
-    //rajouter struct settings (action?) dans les fcts pour s->task[i]
-    //envoi struct css avec href="
     //TODO: fonction Télécharger le fichier dans le bon dossier.
 }
 
@@ -77,7 +71,7 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
             offset = 1;
         }
         if (p) {
-            printf("%s\n", p);
+            //printf("%s\n", p);
             if(isURL(p) == 0){
                 createDirectoryFromPath(p + offset,a);
             }
@@ -140,24 +134,12 @@ char* createPathFile(char* path, action* a){
     return pathOfFile;
 }
 
-int verifPath(char* path, action* a){
-    DIR* rep = NULL;
-    char* pathOfFile = createPathFile(path,a);
-    rep = opendir(pathOfFile); /* Ouverture d'un dossier */
-    if (rep == NULL) /* Si le dossier n'a pas pu être ouvert */
-        return 1; /* (mauvais chemin par exemple) */
-    if (closedir(rep) == -1) /* S'il y a eu un souci avec la fermeture */
-        return -1;
-    return 0;
-}
-
 void writeFile(char* string,char* filename){
     FILE* f=fopen(filename,"a");
         fputs(string,f);
         fputc('\n',f);
     fclose(f);
 }
-
 
 int searchEndingChar(int startingChar,char *tab,char *symbol){
     int counter = startingChar;
@@ -185,16 +167,6 @@ char *searchContentBetween2positions(char *tab,int startingChar,int endingChar){
         counter++;
     }
     dest[counter]='\0';
-    return dest;
-}
-
-
-char *substr(char *src,int pos,int len) {
-    char *dest=NULL;
-    if (len>0) {
-        dest = (char *) malloc(len+1);
-        strncat(dest,src+pos,len);
-    }
     return dest;
 }
 

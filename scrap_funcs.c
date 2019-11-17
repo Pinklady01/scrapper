@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "Curl/curl.h"
 #include "conf_funcs.h"
 #include "scrap_funcs.h"
@@ -51,25 +52,31 @@ int getRessourcesStream(char *url,char *filename)
     return 0;
 }
 
-
 void scrap(action * a,task* t) {
     int isVersioning = 0;
-    createDirectoryFromPath("",a);
+    //createDirectoryFromPath("",a);
+    char temp[100];
+    sprintf(temp,"../%s",a->name);
+    mkdir(temp,0700);
 
     char pageName[100];
     sprintf(pageName, "../%s/%s.html",a->name,a->name);
     FILE *f = fopen(pageName, "wb");
-
+    printf("\n%s\n", pageName);
+    if(f == NULL){
+        printf("blop 6666666666666666\n\n");
+    }
     char* path = malloc(sizeof(char) * (strlen(a->name) + 8));
     strcpy(path ,"Targets/");
     //strcat(path,a->name);
     //printf("%s\n",path);
     createDirectoryIfNotExist(path,a);
-
+    printf("blop 1 ");
     printf("scrap start for %s\n\n", a->url);
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
     CURL *curl = curl_easy_init();
+    printf(" blop 2 ");
 
     if (curl) {
         CURLcode res;
@@ -84,7 +91,7 @@ void scrap(action * a,task* t) {
 #endif
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, getData);
 
-
+        printf(" blop 3\n");
         for (int i = 0; i < a->nbOptions; i++) {
             if (strcmp(a->options[i]->key, "max-depth") == 0) {
                 if (0 < atoi(a->options[i]->value)) {
@@ -98,7 +105,7 @@ void scrap(action * a,task* t) {
             }
 
         }
-
+        printf(" blop 4");
         if (f) {
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
 
@@ -109,7 +116,11 @@ void scrap(action * a,task* t) {
             }
             fclose(f);
         }
+        printf(" blop 5");
         f = fopen(pageName, "rb");
+        if(f == NULL){
+            printf(" blop 666\n");
+        }
         int sizeFile = calculateFileSize(pageName);
         char *contentFile = malloc(sizeFile);
         int nb = fread(contentFile, 1, sizeFile, f);
