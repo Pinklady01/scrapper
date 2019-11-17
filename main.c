@@ -25,10 +25,10 @@ int main() {
 
                 if (now % s->tasks[i]->time == 0 && now != 0) {
                     if (now / s->tasks[i]->time == s->tasks[i]->timesExecuted) {
-                        printf("Executing %s - %dx\n\n", s->tasks[i]->name, s->tasks[i]->timesExecuted);
+                        //printf("Executing %s - %dx\n\n", s->tasks[i]->name, s->tasks[i]->timesExecuted);
                         for (int j = 0; j < s->tasks[i]->nbSites; j++) {
                             for (int k = 0; k < s->nbActions; k++) {
-                                printf("action: %s sites: %s\n",s->actions[k]->name,s->tasks[i]->sites[j]);
+                                //printf("action: %s sites: %s\n",s->actions[k]->name,s->tasks[i]->sites[j]);
                                 if (strcmp(s->actions[k]->name, s->tasks[i]->sites[j]) == 0) {
                                     scrap(s->actions[k], s->tasks[i]);
                                 }

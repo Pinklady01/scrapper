@@ -64,11 +64,11 @@ void scrap(action * a,task* t) {
     FILE *f = fopen(pageName, "wb");
     printf("\n%s\n", pageName);
     if(f == NULL){
-        printf("Erreu de lecture du fichier\n\n");
+        printf("Erreur de lecture du fichier\n\n");
     }
     char* path = malloc(sizeof(char) * (strlen(a->name) + 8));
     strcpy(path ,"Targets/");
-    //strcat(path,a->name);
+    strcat(path,a->name);
     //printf("%s\n",path);
     createDirectoryIfNotExist(path,a);
     printf("scrap start for %s\n\n", a->url);
@@ -141,13 +141,14 @@ void saveAction(int isVersioning, char* path, char* tacheName)
     {
         char* fullPath = malloc(sizeof(char)*(strlen(path)+15));
         strcpy(fullPath,path);
-        strcat(fullPath,"/versioning.txt");
+        strcat(fullPath,"../versioning.txt");
 
         char buffer[256];
         time_t timestamp = time(NULL);
 
         strftime(buffer, sizeof(buffer), "%A %d %B %Y - %X.", localtime(&timestamp));
         printf("%s\n", buffer);
+
 
         writeFile(buffer,fullPath);
         writeFile("\n",fullPath);

@@ -21,6 +21,10 @@ char* searchStringBetweenTwoChar(char*,char*, char);
 char* createPathFile(char* ,action*);
 int isURL(char*);
 void downloadFileFromPath(char*,action*);
+void freeStruct(StringArray*);
+int numberOfOneCharInString(char*,char);
+int verifyIfExtension(char*);
+void displayStruct(StringArray*);
 
 #endif //SCRAPPER_PARSER_H
 

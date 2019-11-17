@@ -24,6 +24,7 @@ void createDirectoryIfNotExist(char *directory, action* a){
     if (stat(pathSearch, &st) == -1) {
         mkdir(pathSearch, 0700);
     }
+    free(pathSearch);
 }
 
 void fillFileFromHTML(char *tab, action* a) {
@@ -41,29 +42,47 @@ void fillFileFromHTML(char *tab, action* a) {
         if (tab[i] == '<') {
             endingChar = searchEndingChar(i, tab, ">=");
             if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), link) == 0) {
-                addContentString(arrayLink,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
+                addContentString(arrayLink,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));//writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/link.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1, endingChar), picture) == 0) {
-                addContentString(arrayPicture,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
+                addContentString(arrayPicture,searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")));//writeFile(searchContentBetween2positions(tab, i, searchEndingChar(i, tab, ">")), "../parser/docTemp/picture.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> =")),script) == 0) {
-                addContentString(arrayScript,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
+                addContentString(arrayScript,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));//writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/script.txt");
             } else if (mysSrcmp(searchContentBetween2positions(tab, i + 1,searchEndingChar(i, tab, "> ")),css) == 0) {
-                addContentString(arrayCss,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));
-                //writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
+                addContentString(arrayCss,searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")));//writeFile(searchContentBetween2positions(tab, i,searchEndingChar(i, tab, ">")),"../parser/docTemp/css.txt");
             }
         }
     }
+
+    readStruct(arrayLink,"<a href=\"",a);
     readStruct(arrayPicture,"src=\"",a);
     readStruct(arrayScript,"src=\"",a);
     readStruct(arrayCss,"href=\"",a);
+
+    //TODO:is URL -> site externe = new task
+
     printf("execution finie\n");
 
-    //TODO: fonction Télécharger le fichier dans le bon dossier.
+    freeStruct(arrayCss);
+    freeStruct(arrayLink);
+    freeStruct(arrayPicture);
+    freeStruct(arrayScript);
 }
 
-void readStruct(struct StringArray* structArray,char *string, action* a) {
+void freeStruct(StringArray* str){
+    for(int i = 0; i < str->counter;i++){
+        free(str->tab[i]);
+    }
+    free(str->tab);
+    free(str);
+}
+
+void displayStruct(StringArray* blop){
+    for(int i = 0; i<blop->counter;i++){
+        printf("tab: %s\n counter: %d capacité: %d\n",blop->tab[i],blop->counter,blop->capacity);
+    }
+}
+
+void readStruct(StringArray* structArray,char *string, action* a) {
     char *p;
     for (int i = 0; i < structArray->counter; i++) {
         p = searchStringBetweenTwoChar(structArray->tab[i],string,'\"');
@@ -73,13 +92,49 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
         }
         if (p) {
             //printf("%s\n", p);
-            if(isURL(p) == 0 && strlen(p + offset) > 0){
+            if(isURL(p) == 0 && (strlen(p + offset) > 0) && (verifyIfExtension(p + offset) == 0)){
+
                 createDirectoryFromPath(p + offset,a);
-                printf("blop strl: %d\n",strlen(p + offset));
                 downloadFileFromPath(p + offset,a);
             }
         }
     }
+}
+
+int verifyIfExtension(char* path) {
+    int counter = numberOfOneCharInString(path,'/');
+    int nb = 0;
+    int taille =0;
+    char *pathSearch = malloc(sizeof(char) * strlen(path));
+    for(int i = 0; i<strlen(path);i++){
+        if(nb == counter){
+            pathSearch[taille] = path[i];
+            taille++;
+        }else if(path[i] == '/'){
+            nb++;
+        }
+    }
+    pathSearch[taille] = '\0';
+    //printf("%s\n",pathSearch);
+    if (strstr(pathSearch, ".") == NULL) {
+        free(pathSearch);
+        return 1;
+    }else if(strlen(pathSearch) > 1){
+        free(pathSearch);
+        return 0;
+    }
+    free(pathSearch);
+    return 1;
+}
+
+int numberOfOneCharInString(char* str,char c){
+    int counter = 0;
+    for(int i =0; i< strlen(str);i++){
+        if(str[i] ==c){
+            counter++;
+        }
+    }
+    return counter;
 }
 
 int isURL(char * tab){
@@ -106,7 +161,6 @@ char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar
 }
 
 void createDirectoryFromPath(char *path, action* a) {
-    int exist;
     char* pathSearch = malloc(sizeof(char)*strlen(path));
     if(strlen(path) > 1){
         for(int i = 0;i<strlen(path);i++){
