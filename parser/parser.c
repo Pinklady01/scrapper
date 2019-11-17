@@ -78,15 +78,20 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
         }
         if (p) {
             printf("%s\n", p);
-            createDirectoryFromPath(p + offset,a);
+            if(isURL(p) == 0){
+                createDirectoryFromPath(p + offset,a);
+            }
         }
     }
 }
 
-int isURL(){
-    //TODO: fonction
-    // commence par https::// ou http:// renvoie 1 sinon 0
-    // si 1, ne pas telecharger en fichier à voire si scrapper
+int isURL(char * tab){
+    if (strstr(tab, "https://") != NULL){
+        return 1;
+    }else if(strstr(tab, "http://") != NULL){
+        return 1;
+    }
+    return 0;
 }
 
 char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar){
@@ -124,7 +129,6 @@ void downloadFileFromPath(char* path){
 
 }
 
-//TODO: A VERIFIER CreatePathFile
 char* createPathFile(char* path, action* a){
     char* pathOfFile = malloc(sizeof(char)*(strlen(a->name))+strlen(path)+4);
     strcpy(pathOfFile,"../");

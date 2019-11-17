@@ -20,7 +20,6 @@ int getRessourcesStream(char *url,char *filename)
     CURLcode res;
     FILE* f=fopen(filename,"wb");
 
-
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
     if(curl) {

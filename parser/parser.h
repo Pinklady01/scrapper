@@ -9,18 +9,19 @@
 #include "struct_src.h"
 
 int calculateFileSize(char *);
-void fillFileFromHTML(char *,struct action*);
+void fillFileFromHTML(char *,action*);
 int searchEndingChar(int,char *,char *);
 char *searchContentBetween2positions(char *,int,int);
-void createDirectoryIfNotExist(char *,struct action*);
+void createDirectoryIfNotExist(char *,action*);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
 void writeFile(char*,char*);
 void readStruct(StringArray* ,char* ,action* );
-void createDirectoryFromPath(char *,struct action* );
-int verifPath(char*,struct action*);
+void createDirectoryFromPath(char *,action* );
+int verifPath(char*,action*);
 char* searchStringBetweenTwoChar(char*,char*, char);
-char* createPathFile(char* ,struct action*);
+char* createPathFile(char* ,action*);
+int isURL(char*);
 
 #endif //SCRAPPER_PARSER_H
 
