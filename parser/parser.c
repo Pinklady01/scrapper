@@ -73,8 +73,9 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
         }
         if (p) {
             //printf("%s\n", p);
-            if(isURL(p) == 0){
+            if(isURL(p) == 0 && strlen(p + offset) > 0){
                 createDirectoryFromPath(p + offset,a);
+                printf("blop strl: %d\n",strlen(p + offset));
                 downloadFileFromPath(p + offset,a);
             }
         }
@@ -123,9 +124,10 @@ void createDirectoryFromPath(char *path, action* a) {
 void downloadFileFromPath(char* path,action* a){
     char url[500];
     sprintf(url,"%s/%s",a->url,path);
+    //printf("url : %s\n",url);
     getRessourcesStream(url,createPathFile(path,a));
 
-    printf("dest : %s\nurl : %s\n",createPathFile(path,a),url);
+    //printf("dest : %s\nurl : %s\n",createPathFile(path,a),url);
 }
 
 char* createPathFile(char* path, action* a){
