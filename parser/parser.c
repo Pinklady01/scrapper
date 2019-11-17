@@ -21,7 +21,7 @@ void createDirectoryIfNotExist(char *directory, action* a){
     struct stat st = {0};
     char* pathSearch = createPathFile(directory,a);
     if (stat(pathSearch, &st) == -1) {
-        mkdir(directory, 0700);
+        mkdir(pathSearch, 0700);
     }
 }
 
@@ -83,25 +83,35 @@ char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar
     char* p = strstr(tab, startingString);
     int counter = strlen(startingString);
     int counterEnd = counter;
-    while (p[counterEnd] != endingChar){
-        counterEnd++;
-    }
-    char* res = searchContentBetween2positions(p,counter,counterEnd);
+    if(p != NULL) {
+        while (p[counterEnd] != endingChar) {
+            counterEnd++;
+        }
+        char *res = searchContentBetween2positions(p, counter, counterEnd);
 
-    return res;
+        return res;
+    }
+    return "";
 }
 
 void createDirectoryFromPath(char *path, action* a) {
     int exist;
     char* pathSearch = malloc(sizeof(char)*strlen(path));
-    for(int i = 1;i<strlen(path);i++){
-        if(path[i] == '/'){
-            exist = verifPath(pathSearch,a);
-            if(exist == 1){
-                createDirectoryIfNotExist(pathSearch,a);
+    if(strlen(path) > 1){
+        for(int i = 1;i<strlen(path);i++){
+            if(path[i] == '/'){
+                exist = verifPath(pathSearch,a);
+                if(exist == 1){
+                    createDirectoryIfNotExist(pathSearch,a);
+                }
             }
+            pathSearch[i-1] = path[i];
         }
-        pathSearch[i-1] = path[i];
+    }else{
+        exist = verifPath(pathSearch,a);
+        if(exist == 1){
+            createDirectoryIfNotExist(pathSearch,a);
+        }
     }
 }
 
@@ -112,10 +122,13 @@ void downloadFileFromPath(char* path){
 
 //TODO: A VERIFIER CreatePathFile
 char* createPathFile(char* path, action* a){
-    char* pathOfFile = malloc(sizeof(char)*(strlen(a->url))+strlen(path)+1);
-    strcpy(pathOfFile,a->url);
-    strcat(pathOfFile,path);
-
+    char* pathOfFile = malloc(sizeof(char)*(strlen(a->name))+strlen(path)+4);
+    strcpy(pathOfFile,"../");
+    strcat(pathOfFile,a->name);
+    if(strlen(path)>1){
+        strcat(pathOfFile,"/");
+        strcat(pathOfFile,path);
+    }
     return pathOfFile;
 }
 

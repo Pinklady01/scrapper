@@ -5,74 +5,41 @@
 #include "conf_funcs.h"
 #include "scrap_funcs.h"
 #include <math.h>
+#include <sys/stat.h>
 #include "parser/parser.h"
-#include "ssl.c"
 
 int main() {
+    //getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");
 
-    //test();
-    time_t startTime = time(NULL), actualTime;
-    settings * s = handleConf("../config.sconf");
+        time_t startTime = time(NULL), actualTime;
+        settings *s = handleConf("../config.sconf");
 
-    if (s == NULL){
-        fprintf(stderr, "conf failed");
-        return 1;
-    }
-     for(int i = 0; i < s->nbActions;i++)
-     {
-         printf("name : %s\n",s->actions[i]->name);
-         printf("url : %s\n",s->actions[i]->url);
-         //createDirectoryIfNotExist(s->actions[i]->url,s->actions[i]);
+        if (s == NULL) {
+            fprintf(stderr, "conf failed");
+            return 1;
+        }
+        while (1) {
 
-         //TODO:insertion du parser ici
-         //TODO:ajout url aux fct du parser
+            actualTime = time(NULL);
+            long long now = (actualTime - startTime);
+            for (int i = 0; i < s->nbTasks; i++) {
 
-         /*FILE *f=fopen("../Mon deuxieme site.html","rb");
-         int sizeFile = calculateFileSize("../Mon deuxieme site.html");
-         char *contentFile = malloc(sizeFile);
-         fread(contentFile,1,sizeFile,f);
-         //printf("%s",contentFile);
-         fillFileFromHTML(contentFile,s->action[i]);
-         fclose(f);
-         getRessourcesStream("https://www.ftfi.fr/bois/js/lightbox.js","../parser/webSiteAssets/test.js");*/
-
-         for(int j = 0; j < s->actions[i]->nbOptions;j++)
-         {
-             printf("key : %s\n",s->actions[i]->options[j]->key);
-             printf("value : %s\n",s->actions[i]->options[j]->value);
-         }
-     }
-     for(int i = 0; i < s->nbTasks; i++)
-     {
-         printf("task : %s\n",s->tasks[i]->name);
-     }
-
-
-
-    while(1){
-        
-        actualTime = time(NULL);
-        long long now = (actualTime - startTime);
-        //printf("nb task %d\n",s->nbTasks);
-        for (int i = 0; i < s->nbTasks; i++){
-            
-            if (now % s->tasks[i]->time == 0 && now != 0) {
-                if (now / s->tasks[i]->time == s->tasks[i]->timesExecuted ){
-                    printf("Executing %s - %dx\n\n", s->tasks[i]->name, s->tasks[i]->timesExecuted);
-                    for(int j = 0; j < s->tasks[i]->nbSites; j++){
-                        for (int k = 0; k < s->nbActions; k++){
-                            if (strcmp(s->actions[k]->name, s->tasks[i]->sites[j]) == 0){
-                                scrap(s->actions[k]);
+                if (now % s->tasks[i]->time == 0 && now != 0) {
+                    if (now / s->tasks[i]->time == s->tasks[i]->timesExecuted) {
+                        printf("Executing %s - %dx\n\n", s->tasks[i]->name, s->tasks[i]->timesExecuted);
+                        for (int j = 0; j < s->tasks[i]->nbSites; j++) {
+                            for (int k = 0; k < s->nbActions; k++) {
+                                if (strcmp(s->actions[k]->name, s->tasks[i]->sites[j]) == 0) {
+                                    scrap(s->actions[k], s->tasks[i]);
+                                }
                             }
                         }
+                        printf("\n");
+                        s->tasks[i]->timesExecuted++;
                     }
-                    printf("\n");
-                    s->tasks[i]->timesExecuted++;
                 }
             }
         }
-        
-    }
-    return 0;
 
-}
+        return 0;
+    }

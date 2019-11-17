@@ -6,6 +6,7 @@
 #define SCRAPPER_PARSER_H
 
 #include "../conf_funcs.h"
+#include "struct_src.h"
 
 int calculateFileSize(char *);
 void fillFileFromHTML(char *,struct action*);
@@ -15,7 +16,7 @@ void createDirectoryIfNotExist(char *,struct action*);
 char *substr(char *src,int pos,int len);
 int mysSrcmp(char *, char *);
 void writeFile(char*,char*);
-void readStruct(struct StringArray* ,char* ,struct action* );
+void readStruct(StringArray* ,char* ,action* );
 void createDirectoryFromPath(char *,struct action* );
 int verifPath(char*,struct action*);
 char* searchStringBetweenTwoChar(char*,char*, char);
