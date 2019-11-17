@@ -1,6 +1,6 @@
 =
 {name -> Mon site web}          #Correspond au nom de vôtre action
-{url -> https://ftfi.fr}                  #URL du site à récupérer
+{url -> https://www.google.com}                  #URL du site à récupérer
 +
 {max-depth -> 1}
 {versioning -> off}
@@ -8,7 +8,7 @@
 
 =
 {name -> Mon deuxieme site} #Correspond au nom de vôtre deuxième action
-{url -> https://www.google.com}                  #URL du site à récupérer
+{url -> https://ftfi.fr}                  #URL du site à récupérer
 +
 {max-depth -> 0}              #Liste des options au format {KEY -> VALUE}
 {versioning -> off}

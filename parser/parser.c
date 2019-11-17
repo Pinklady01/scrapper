@@ -72,11 +72,21 @@ void readStruct(struct StringArray* structArray,char *string, action* a) {
     char *p;
     for (int i = 0; i < structArray->counter; i++) {
         p = searchStringBetweenTwoChar(structArray->tab[i],string,'\"');
+        int offset = 0;
+        if (p[0] == '/') {
+            offset = 1;
+        }
         if (p) {
-            printf("%s", p);
-            createDirectoryFromPath(p,a);
+            printf("%s\n", p);
+            createDirectoryFromPath(p + offset,a);
         }
     }
+}
+
+int isURL(){
+    //TODO: fonction
+    // commence par https::// ou http:// renvoie 1 sinon 0
+    // si 1, ne pas telecharger en fichier à voire si scrapper
 }
 
 char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar){
@@ -88,7 +98,6 @@ char* searchStringBetweenTwoChar(char* tab,char* startingString, char endingChar
             counterEnd++;
         }
         char *res = searchContentBetween2positions(p, counter, counterEnd);
-
         return res;
     }
     return "";
@@ -98,21 +107,16 @@ void createDirectoryFromPath(char *path, action* a) {
     int exist;
     char* pathSearch = malloc(sizeof(char)*strlen(path));
     if(strlen(path) > 1){
-        for(int i = 1;i<strlen(path);i++){
+        for(int i = 0;i<strlen(path);i++){
             if(path[i] == '/'){
-                exist = verifPath(pathSearch,a);
-                if(exist == 1){
-                    createDirectoryIfNotExist(pathSearch,a);
-                }
+                pathSearch[i] = '\0';
+                createDirectoryIfNotExist(pathSearch,a);
             }
-            pathSearch[i-1] = path[i];
+            pathSearch[i] = path[i];
         }
     }else{
-        exist = verifPath(pathSearch,a);
-        if(exist == 1){
             createDirectoryIfNotExist(pathSearch,a);
         }
-    }
 }
 
 void downloadFileFromPath(char* path){

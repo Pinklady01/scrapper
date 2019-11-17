@@ -57,8 +57,8 @@ void scrap(action * a,task* t) {
     int isVersioning = 0;
     createDirectoryFromPath("",a);
 
-    char pageName[30];
-    sprintf(pageName, "../%s.html", a->name);
+    char pageName[100];
+    sprintf(pageName, "../%s/%s.html",a->name,a->name);
     FILE *f = fopen(pageName, "wb");
 
     char* path = malloc(sizeof(char) * (strlen(a->name) + 8));
@@ -120,7 +120,7 @@ void scrap(action * a,task* t) {
             }
 
         }
-        fillFileFromHTML(contentFile, path);
+        fillFileFromHTML(contentFile,a);
         saveAction(isVersioning, path,t->name);
         fclose(f);
         printf("file close\n");
