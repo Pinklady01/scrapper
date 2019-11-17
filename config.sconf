@@ -21,13 +21,13 @@
 
 ==                              #Lance la requête HTTP toutes les 2 minutes et 10 secondes
 {name -> Ma tache facile 1}
-{minute -> 2}
-{second -> 10}
+{minute -> 0}
+{second -> 30}
 +
 (Mon site web)
 
 ==                              #Lance la requêtes HTTP toutes les 6 heures
 {name -> Ma tache facile 2}
-{second -> 6}
+{second -> 50}
 +
 (Mon deuxieme site)

@@ -67,10 +67,10 @@ void scrap(action * a,task* t) {
         printf("Erreur de lecture du fichier\n\n");
     }
     char* path = malloc(sizeof(char) * (strlen(a->name) + 8));
-    strcpy(path ,"Targets/");
-    strcat(path,a->name);
+    strcpy(path ,temp);
+    strcat(path,"/");
     //printf("%s\n",path);
-    createDirectoryIfNotExist(path,a);
+    //createDirectoryIfNotExist(path,a);
     printf("scrap start for %s\n\n", a->url);
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -141,15 +141,14 @@ void saveAction(int isVersioning, char* path, char* tacheName)
     {
         char* fullPath = malloc(sizeof(char)*(strlen(path)+15));
         strcpy(fullPath,path);
-        strcat(fullPath,"../versioning.txt");
+        strcat(fullPath,"versioning.txt");
 
         char buffer[256];
         time_t timestamp = time(NULL);
 
         strftime(buffer, sizeof(buffer), "%A %d %B %Y - %X.", localtime(&timestamp));
         printf("%s\n", buffer);
-
-
+        printf("fullPath %s\n",fullPath);
         writeFile(buffer,fullPath);
         writeFile("\n",fullPath);
         writeFile(tacheName,fullPath);
